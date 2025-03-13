@@ -83,6 +83,28 @@ export type InsertReferral = z.infer<typeof insertReferralSchema>;
 export type Activity = typeof activities.$inferSelect;
 export type InsertActivity = z.infer<typeof insertActivitySchema>;
 
+// User Schema
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  password: text("password"), // Hashed password (might be null for OAuth users)
+  provider: text("provider").default("local"), // "local", "google", etc.
+  providerId: text("provider_id"), // ID from the provider
+  role: text("role").notNull().default("user"), // user, admin
+  lastLogin: timestamp("last_login"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const insertUserSchema = createInsertSchema(users).omit({
+  id: true,
+  lastLogin: true,
+  createdAt: true,
+});
+
+export type User = typeof users.$inferSelect;
+export type InsertUser = z.infer<typeof insertUserSchema>;
+
 // Extended types with joined data
 export type ReferralWithDetails = Referral & {
   candidate: Candidate;

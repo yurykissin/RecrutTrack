@@ -1,13 +1,20 @@
 import { 
-  positions, candidates, referrals, activities,
+  positions, candidates, referrals, activities, users,
   type Position, type InsertPosition,
   type Candidate, type InsertCandidate,
   type Referral, type InsertReferral,
   type Activity, type InsertActivity,
-  type ReferralWithDetails
+  type ReferralWithDetails,
+  type User, type InsertUser
 } from "@shared/schema";
 
 export interface IStorage {
+  // Users and Authentication
+  getUserByEmail(email: string): Promise<User | undefined>;
+  getUserById(id: number): Promise<User | undefined>;
+  createUser(user: InsertUser): Promise<User>;
+  updateUserLastLogin(id: number): Promise<void>;
+  
   // Positions
   getAllPositions(): Promise<Position[]>;
   getPosition(id: number): Promise<Position | undefined>;
@@ -53,25 +60,62 @@ export class MemStorage implements IStorage {
   private candidates: Map<number, Candidate>;
   private referrals: Map<number, Referral>;
   private activities: Map<number, Activity>;
+  private users: Map<number, User>;
   
   private positionsId: number;
   private candidatesId: number;
   private referralsId: number;
   private activitiesId: number;
+  private usersId: number;
   
   constructor() {
     this.positions = new Map();
     this.candidates = new Map();
     this.referrals = new Map();
     this.activities = new Map();
+    this.users = new Map();
     
     this.positionsId = 1;
     this.candidatesId = 1;
     this.referralsId = 1;
     this.activitiesId = 1;
+    this.usersId = 1;
     
     // Add some initial data
     this.seedData();
+  }
+  
+  // User methods
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const users = Array.from(this.users.values());
+    return users.find(user => user.email.toLowerCase() === email.toLowerCase());
+  }
+  
+  async getUserById(id: number): Promise<User | undefined> {
+    return this.users.get(id);
+  }
+  
+  async createUser(user: InsertUser): Promise<User> {
+    const id = this.usersId++;
+    const now = new Date();
+    
+    const newUser: User = {
+      ...user,
+      id,
+      lastLogin: null,
+      createdAt: now
+    };
+    
+    this.users.set(id, newUser);
+    return newUser;
+  }
+  
+  async updateUserLastLogin(id: number): Promise<void> {
+    const user = this.users.get(id);
+    if (user) {
+      user.lastLogin = new Date();
+      this.users.set(id, user);
+    }
   }
 
   private seedData() {
