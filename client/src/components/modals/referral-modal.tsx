@@ -49,6 +49,9 @@ export default function ReferralModal({
     candidateId: z.number().min(1, "Please select a candidate"),
     positionId: z.number().min(1, "Please select a position"),
     feeEarned: z.number().nullable().optional(),
+    mode: z.enum(["Placement", "Outsource"]).default("Placement"),
+    feeType: z.enum(["OneTime", "Monthly"]).default("OneTime"),
+    feeMonths: z.number().nullable().optional(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -59,13 +62,18 @@ export default function ReferralModal({
       referralDate: new Date().toISOString().split('T')[0],
       status: "Referred",
       notes: "",
-      feeEarned: null
+      feeEarned: null,
+      mode: "Placement",
+      feeType: "OneTime",
+      feeMonths: null
     }
   });
   
-  // Track if fee earned field should be shown
+  // Track fields to show/hide based on status and mode
   const watchStatus = form.watch("status");
+  const watchMode = form.watch("mode");
   const showFeeEarned = watchStatus === "Hired";
+  const showFeeMonths = watchMode === "Outsource";
   
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
@@ -199,6 +207,77 @@ export default function ReferralModal({
               
               <FormField
                 control={form.control}
+                name="mode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Mode</FormLabel>
+                    <Select 
+                      onValueChange={field.onChange} 
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select mode" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="Placement">Placement (One-time Fee)</SelectItem>
+                        <SelectItem value="Outsource">Outsource (Monthly Fee)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="feeType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Fee Type</FormLabel>
+                    <Select 
+                      onValueChange={field.onChange} 
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select fee type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="OneTime">One-Time Payment</SelectItem>
+                        <SelectItem value="Monthly">Monthly Payments</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              {showFeeMonths && (
+                <FormField
+                  control={form.control}
+                  name="feeMonths"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Fee Months</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="number" 
+                          placeholder="e.g. 3" 
+                          value={field.value === null ? "" : field.value}
+                          onChange={(e) => field.onChange(e.target.value === "" ? null : parseInt(e.target.value))}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+              
+              <FormField
+                control={form.control}
                 name="status"
                 render={({ field }) => (
                   <FormItem>
@@ -235,12 +314,12 @@ export default function ReferralModal({
                         <FormControl>
                           <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                              <span className="text-gray-500">$</span>
+                              <span className="text-gray-500">₪</span>
                             </div>
                             <Input 
                               type="number" 
                               className="pl-7" 
-                              placeholder="e.g. 2500" 
+                              placeholder="e.g. 25000" 
                               value={field.value === null ? "" : field.value}
                               onChange={(e) => field.onChange(e.target.value === "" ? null : parseFloat(e.target.value))}
                             />

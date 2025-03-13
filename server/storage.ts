@@ -168,7 +168,10 @@ export class MemStorage implements IStorage {
       referralDate: new Date("2023-07-15"),
       status: "Hired",
       notes: "Great fit for the team, started August 1st",
-      feeEarned: 2500
+      feeEarned: 25000,
+      mode: "Placement",
+      feeType: "OneTime",
+      feeMonths: null
     };
     
     const referral2: Referral = {
@@ -178,7 +181,10 @@ export class MemStorage implements IStorage {
       referralDate: new Date("2023-08-05"),
       status: "Interviewing",
       notes: "Second interview scheduled next week",
-      feeEarned: null
+      feeEarned: null,
+      mode: "Placement",
+      feeType: "OneTime",
+      feeMonths: null
     };
     
     const referral3: Referral = {
@@ -188,7 +194,10 @@ export class MemStorage implements IStorage {
       referralDate: new Date("2023-08-10"),
       status: "Referred",
       notes: "Initial screening call scheduled",
-      feeEarned: null
+      feeEarned: null,
+      mode: "Outsource",
+      feeType: "Monthly",
+      feeMonths: 3
     };
     
     this.referrals.set(referral1.id, referral1);
@@ -226,7 +235,7 @@ export class MemStorage implements IStorage {
     const activity4: Activity = {
       id: this.activitiesId++,
       type: "referral_updated",
-      description: "Received referral fee: $2,500 for Emma Davis",
+      description: "Received referral fee: ₪25,000 for Emma Davis",
       timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000), // 3 days ago
       relatedId: referral1.id,
       relatedType: "referral"
