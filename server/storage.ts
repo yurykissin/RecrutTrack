@@ -423,10 +423,18 @@ export class MemStorage implements IStorage {
   async createReferral(referral: InsertReferral): Promise<Referral> {
     const id = this.referralsId++;
     const now = new Date();
+    
+    // Set default values for new fields if not provided
+    const mode = referral.mode || "Placement";
+    const feeType = referral.feeType || "OneTime";
+    
     const newReferral: Referral = { 
       ...referral, 
       id,
-      referralDate: referral.referralDate || now
+      referralDate: referral.referralDate || now,
+      mode: mode,
+      feeType: feeType,
+      feeMonths: referral.feeMonths || null
     };
     
     this.referrals.set(id, newReferral);
@@ -470,7 +478,7 @@ export class MemStorage implements IStorage {
       if (candidate) {
         await this.createActivity({
           type: "referral_updated",
-          description: `Received referral fee: $${referral.feeEarned} for ${candidate.fullName}`,
+          description: `Received referral fee: ₪${referral.feeEarned} for ${candidate.fullName}`,
           timestamp: new Date(),
           relatedId: id,
           relatedType: "referral"

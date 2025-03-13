@@ -46,6 +46,9 @@ export const referrals = pgTable("referrals", {
   status: text("status").notNull().default("Referred"), // Referred, Interviewing, Hired, Rejected
   notes: text("notes"),
   feeEarned: doublePrecision("fee_earned"), // Only set when status is Hired
+  mode: text("mode").notNull().default("Placement"), // Placement or Outsource
+  feeType: text("fee_type").notNull().default("OneTime"), // OneTime or Monthly
+  feeMonths: integer("fee_months"), // Number of months for outsource mode
 });
 
 export const insertReferralSchema = createInsertSchema(referrals).omit({

@@ -16,12 +16,12 @@ export function formatDate(date: string | Date): string {
 }
 
 /**
- * Format a number as currency (USD)
+ * Format a number as currency (ILS)
  */
 export function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("he-IL", {
     style: "currency",
-    currency: "USD",
+    currency: "ILS",
     maximumFractionDigits: 0
   }).format(amount);
 }
