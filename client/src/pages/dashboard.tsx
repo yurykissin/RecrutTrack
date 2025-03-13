@@ -46,38 +46,42 @@ export default function Dashboard() {
         <StatsCard
           title="Open Positions"
           value={isLoadingStats ? "Loading..." : stats?.openPositions.toString() || "0"}
-          change={isLoadingStats ? null : stats?.monthlyChange.openPositions}
+          change={isLoadingStats ? null : (stats?.monthlyChange.openPositions ?? null)}
           icon={<Briefcase />}
           iconColor="text-indigo-600"
           iconBgColor="bg-indigo-100"
+          linkTo="/positions"
         />
         
         <StatsCard
           title="Active Candidates"
           value={isLoadingStats ? "Loading..." : stats?.activeCandidates.toString() || "0"}
-          change={isLoadingStats ? null : stats?.monthlyChange.activeCandidates}
+          change={isLoadingStats ? null : (stats?.monthlyChange.activeCandidates ?? null)}
           icon={<UserIcon />}
           iconColor="text-green-600"
           iconBgColor="bg-green-100"
+          linkTo="/candidates"
         />
         
         <StatsCard
           title="Referrals Made"
           value={isLoadingStats ? "Loading..." : stats?.referralsMade.toString() || "0"}
-          change={isLoadingStats ? null : stats?.monthlyChange.referralsMade}
+          change={isLoadingStats ? null : (stats?.monthlyChange.referralsMade ?? null)}
           icon={<HandshakeIcon />}
           iconColor="text-amber-600"
           iconBgColor="bg-amber-100"
+          linkTo="/referrals"
         />
         
         <StatsCard
           title="Fees Earned"
           value={isLoadingStats ? "Loading..." : formatCurrency(stats?.feesEarned || 0)}
-          change={isLoadingStats ? null : stats?.monthlyChange.feesEarned}
+          change={isLoadingStats ? null : (stats?.monthlyChange.feesEarned ?? null)}
           changePrefix="$"
           icon={<DollarSign />}
           iconColor="text-purple-600"
           iconBgColor="bg-purple-100"
+          linkTo="/referrals"
         />
       </div>
 

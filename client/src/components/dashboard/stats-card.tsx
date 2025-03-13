@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { ArrowUp } from "lucide-react";
 import React from "react";
+import { Link } from "wouter";
 
 interface StatsCardProps {
   title: string;
@@ -10,6 +11,7 @@ interface StatsCardProps {
   iconColor: string;
   iconBgColor: string;
   changePrefix?: string;
+  linkTo?: string;  // Optional link path
 }
 
 export default function StatsCard({
@@ -19,10 +21,11 @@ export default function StatsCard({
   icon,
   iconColor,
   iconBgColor,
-  changePrefix = ""
+  changePrefix = "",
+  linkTo
 }: StatsCardProps) {
-  return (
-    <Card className="p-6">
+  const CardContent = () => (
+    <>
       <div className="flex items-center">
         <div className={`p-3 rounded-full ${iconBgColor} ${iconColor}`}>
           {icon}
@@ -42,6 +45,25 @@ export default function StatsCard({
           </div>
         </div>
       )}
+    </>
+  );
+
+  if (linkTo) {
+    return (
+      <Link href={linkTo}>
+        <Card className="p-6 cursor-pointer hover:shadow-md hover:border-primary/50 transition-all duration-200 group">
+          <CardContent />
+          <div className="mt-3 text-xs text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+            Click to view details →
+          </div>
+        </Card>
+      </Link>
+    );
+  }
+
+  return (
+    <Card className="p-6">
+      <CardContent />
     </Card>
   );
 }

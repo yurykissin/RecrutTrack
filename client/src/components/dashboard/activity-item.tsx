@@ -6,6 +6,7 @@ import {
   HandshakeIcon
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { Link } from "wouter";
 
 interface ActivityItemProps {
   activity: Activity;
@@ -51,15 +52,48 @@ export default function ActivityItem({ activity }: ActivityItemProps) {
     return formatDistanceToNow(new Date(activity.timestamp), { addSuffix: true });
   };
   
+  // Determine the link based on activity type and related ID
+  const getLinkForActivity = () => {
+    switch (activity.type) {
+      case "candidate_added":
+        return "/candidates";
+      case "position_added":
+        return "/positions";
+      case "referral_created":
+      case "referral_updated":
+        return "/referrals";
+      default:
+        return null;
+    }
+  };
+  
+  const linkTo = getLinkForActivity();
+  
+  const ActivityContent = () => (
+    <div className="flex items-center">
+      {getIconForActivity()}
+      <div className="ml-4">
+        <p className="text-sm font-medium text-gray-900">{activity.description}</p>
+        <p className="text-xs text-gray-500">{getTimeAgo()}</p>
+      </div>
+    </div>
+  );
+  
+  if (linkTo) {
+    return (
+      <li className="py-3">
+        <Link href={linkTo}>
+          <div className="cursor-pointer hover:bg-gray-50 rounded-lg p-2 -mx-2 transition-colors duration-200">
+            <ActivityContent />
+          </div>
+        </Link>
+      </li>
+    );
+  }
+  
   return (
     <li className="py-3">
-      <div className="flex items-center">
-        {getIconForActivity()}
-        <div className="ml-4">
-          <p className="text-sm font-medium text-gray-900">{activity.description}</p>
-          <p className="text-xs text-gray-500">{getTimeAgo()}</p>
-        </div>
-      </div>
+      <ActivityContent />
     </li>
   );
 }
