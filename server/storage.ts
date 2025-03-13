@@ -80,10 +80,10 @@ export class MemStorage implements IStorage {
       id: this.positionsId++,
       title: "Senior Software Engineer",
       company: "TechCorp",
-      location: "San Francisco",
+      location: "Tel Aviv",
       description: "We are looking for an experienced software engineer to join our team...",
-      salaryMin: 120000,
-      salaryMax: 150000,
+      salaryMin: 25000, // Monthly salary in ILS
+      salaryMax: 35000, // Monthly salary in ILS
       status: "Open",
       dateAdded: new Date("2023-08-15")
     };
@@ -92,10 +92,10 @@ export class MemStorage implements IStorage {
       id: this.positionsId++,
       title: "Product Manager",
       company: "InnoTech",
-      location: "Remote",
+      location: "Herzliya",
       description: "Seeking a product manager to lead our product development efforts...",
-      salaryMin: 110000,
-      salaryMax: 140000,
+      salaryMin: 22000, // Monthly salary in ILS
+      salaryMax: 32000, // Monthly salary in ILS
       status: "Open",
       dateAdded: new Date("2023-08-10")
     };
@@ -104,10 +104,10 @@ export class MemStorage implements IStorage {
       id: this.positionsId++,
       title: "UX Designer",
       company: "GlobalSoft",
-      location: "London",
+      location: "Jerusalem",
       description: "Looking for a talented UX designer to improve our user experience...",
-      salaryMin: 90000,
-      salaryMax: 115000,
+      salaryMin: 18000, // Monthly salary in ILS
+      salaryMax: 24000, // Monthly salary in ILS
       status: "Closed",
       dateAdded: new Date("2023-07-22")
     };
@@ -121,7 +121,7 @@ export class MemStorage implements IStorage {
       id: this.candidatesId++,
       fullName: "Sarah Johnson",
       email: "sarah.johnson@example.com",
-      phone: "(555) 123-4567",
+      phone: "050-1234567",
       currentRole: "Senior Frontend Developer",
       skills: "JavaScript, React, TypeScript, CSS",
       experience: 8,
@@ -135,7 +135,7 @@ export class MemStorage implements IStorage {
       id: this.candidatesId++,
       fullName: "Michael Chen",
       email: "michael.chen@example.com",
-      phone: "(555) 987-6543",
+      phone: "052-9876543",
       currentRole: "Product Manager",
       skills: "Product Strategy, Roadmapping, User Research, Agile",
       experience: 6,
@@ -149,7 +149,7 @@ export class MemStorage implements IStorage {
       id: this.candidatesId++,
       fullName: "Emma Davis",
       email: "emma.davis@example.com",
-      phone: "(555) 456-7890",
+      phone: "054-4567890",
       currentRole: "UX Designer",
       skills: "UI Design, Figma, User Testing, Prototyping",
       experience: 5,
