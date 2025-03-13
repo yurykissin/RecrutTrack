@@ -28,6 +28,7 @@ export const candidates = pgTable("candidates", {
   currentRole: text("current_role").notNull(),
   skills: text("skills").notNull(), // Comma-separated skills
   experience: integer("experience").notNull(), // Years of experience
+  salaryExpectation: integer("salary_expectation"), // Monthly salary expectation in ILS
   notes: text("notes"),
   availability: text("availability").notNull(), // immediate, 2weeks, 1month, 3months
   status: text("status").notNull().default("Looking"), // Looking or Placed
