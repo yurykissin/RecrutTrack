@@ -59,13 +59,13 @@ export default function ReferralsTable({
   const currentReferrals = referrals.slice(indexOfFirstReferral, indexOfLastReferral);
   const totalPages = Math.ceil(referrals.length / referralsPerPage);
   
-  const getStatusBadgeVariant = (status: string) => {
+  const getStatusColor = (status: string): string => {
     switch (status) {
-      case "Referred": return "warning";
-      case "Interviewing": return "info";
-      case "Hired": return "success";
-      case "Rejected": return "destructive";
-      default: return "secondary";
+      case "Referred": return "bg-yellow-100 text-yellow-800";
+      case "Interviewing": return "bg-blue-100 text-blue-800";
+      case "Hired": return "bg-green-100 text-green-800";
+      case "Rejected": return "bg-red-100 text-red-800";
+      default: return "bg-gray-100 text-gray-800";
     }
   };
   
@@ -125,6 +125,7 @@ export default function ReferralsTable({
                 <TableHead>Position</TableHead>
                 <TableHead>Company</TableHead>
                 <TableHead>Referral Date</TableHead>
+                <TableHead>Mode</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Fee Earned</TableHead>
                 <TableHead>Actions</TableHead>
@@ -138,7 +139,16 @@ export default function ReferralsTable({
                   <TableCell>{referral.position.company}</TableCell>
                   <TableCell>{formatDate(referral.referralDate)}</TableCell>
                   <TableCell>
-                    <Badge variant={getStatusBadgeVariant(referral.status)}>
+                    <Badge variant={referral.mode === "Placement" ? "secondary" : "default"} 
+                           className={referral.mode === "Placement" ? "bg-purple-100 text-purple-800" : "bg-blue-100 text-blue-800"}>
+                      {referral.mode}
+                    </Badge>
+                    {referral.mode === "Outsource" && referral.feeMonths && 
+                      <span className="ml-2 text-xs text-gray-500">({referral.feeMonths} months)</span>
+                    }
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="secondary" className={getStatusColor(referral.status)}>
                       {referral.status}
                     </Badge>
                   </TableCell>
@@ -215,13 +225,17 @@ export default function ReferralsTable({
           </DialogHeader>
           <div className="py-4">
             <p className="mb-4">
-              Congratulations! Please enter the referral fee earned for this successful placement.
+              {selectedReferral?.mode === "Outsource" ? 
+                "Congratulations! Please enter the monthly fee for this outsourcing placement." :
+                "Congratulations! Please enter the referral fee earned for this successful placement (typically one month's salary)."}
             </p>
             <div className="space-y-2">
-              <Label htmlFor="fee-amount">Fee Amount</Label>
+              <Label htmlFor="fee-amount">
+                {selectedReferral?.mode === "Outsource" ? "Monthly Fee Amount (₪)" : "One-Time Fee Amount (₪)"}
+              </Label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <span className="text-gray-500">$</span>
+                  <span className="text-gray-500">₪</span>
                 </div>
                 <Input
                   id="fee-amount"
@@ -229,7 +243,7 @@ export default function ReferralsTable({
                   className="pl-7"
                   value={feeAmount || ""}
                   onChange={(e) => setFeeAmount(e.target.value === "" ? undefined : parseFloat(e.target.value))}
-                  placeholder="e.g. 2500"
+                  placeholder="e.g. 25000"
                 />
               </div>
             </div>
