@@ -124,13 +124,13 @@ export default function PositionModal({
                 name="salaryMin"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Minimum Salary</FormLabel>
+                    <FormLabel>Minimum Monthly Salary</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <span className="text-gray-500">$</span>
+                          <span className="text-gray-500">₪</span>
                         </div>
-                        <Input type="number" className="pl-7" placeholder="e.g. 90000" {...field} />
+                        <Input type="number" className="pl-7" placeholder="e.g. 15000" {...field} />
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -143,13 +143,13 @@ export default function PositionModal({
                 name="salaryMax"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Maximum Salary</FormLabel>
+                    <FormLabel>Maximum Monthly Salary</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <span className="text-gray-500">$</span>
+                          <span className="text-gray-500">₪</span>
                         </div>
-                        <Input type="number" className="pl-7" placeholder="e.g. 120000" {...field} />
+                        <Input type="number" className="pl-7" placeholder="e.g. 25000" {...field} />
                       </div>
                     </FormControl>
                     <FormMessage />

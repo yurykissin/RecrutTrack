@@ -62,7 +62,7 @@ export default function PositionsTable({
               <TableHead>Title</TableHead>
               <TableHead>Company</TableHead>
               <TableHead>Location</TableHead>
-              <TableHead>Salary Range</TableHead>
+              <TableHead>Monthly Salary Range</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Date Added</TableHead>
               <TableHead>Actions</TableHead>

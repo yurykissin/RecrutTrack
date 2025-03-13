@@ -50,6 +50,7 @@ export default function CandidateModal({
       currentRole: "",
       skills: "",
       experience: 0,
+      salaryExpectation: null,
       notes: "",
       availability: "immediate",
       status: "Looking"
@@ -138,6 +139,32 @@ export default function CandidateModal({
                     <FormLabel>Years of Experience</FormLabel>
                     <FormControl>
                       <Input type="number" placeholder="e.g. 5" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="salaryExpectation"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Monthly Salary Expectation</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                          <span className="text-gray-500">₪</span>
+                        </div>
+                        <Input 
+                          type="number" 
+                          className="pl-7" 
+                          placeholder="e.g. 20000" 
+                          {...field}
+                          value={field.value === null ? '' : field.value}
+                          onChange={(e) => field.onChange(e.target.value === '' ? null : Number(e.target.value))}
+                        />
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

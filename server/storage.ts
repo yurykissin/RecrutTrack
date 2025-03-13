@@ -125,6 +125,7 @@ export class MemStorage implements IStorage {
       currentRole: "Senior Frontend Developer",
       skills: "JavaScript, React, TypeScript, CSS",
       experience: 8,
+      salaryExpectation: 25000, // Monthly salary in ILS
       notes: "Great communication skills, looking for remote opportunities",
       availability: "2weeks",
       status: "Looking"
@@ -138,6 +139,7 @@ export class MemStorage implements IStorage {
       currentRole: "Product Manager",
       skills: "Product Strategy, Roadmapping, User Research, Agile",
       experience: 6,
+      salaryExpectation: 30000, // Monthly salary in ILS
       notes: "Strong background in B2B SaaS products",
       availability: "1month",
       status: "Looking"
@@ -151,6 +153,7 @@ export class MemStorage implements IStorage {
       currentRole: "UX Designer",
       skills: "UI Design, Figma, User Testing, Prototyping",
       experience: 5,
+      salaryExpectation: 23000, // Monthly salary in ILS
       notes: "Portfolio includes work for financial and healthcare sectors",
       availability: "immediate",
       status: "Placed"
