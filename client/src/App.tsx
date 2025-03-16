@@ -9,6 +9,7 @@ import Candidates from "@/pages/candidates";
 import Referrals from "@/pages/referrals";
 import Settings from "@/pages/settings";
 import Sidebar from "@/components/layout/sidebar";
+import Login from "@/pages/login";
 import MobileSidebar from "@/components/layout/mobile-sidebar";
 import Header from "@/components/layout/header";
 import { useState } from "react";
@@ -16,8 +17,9 @@ import { useState } from "react";
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Dashboard} />
+      <Route path="/" component={Login} />
       <Route path="/positions" component={Positions} />
+      <Route path="/dashboard" component={Dashboard} />
       <Route path="/candidates" component={Candidates} />
       <Route path="/referrals" component={Referrals} />
       <Route path="/settings" component={Settings} />

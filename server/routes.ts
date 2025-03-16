@@ -8,13 +8,51 @@ import {
 } from "@shared/schema";
 import { z } from "zod";
 import { fromZodError } from "zod-validation-error";
+import { isAuthenticated } from "./middleware/auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // API routes prefix
   const apiPrefix = "/api";
   
+  // POST /api/login
+  // POST /api/login
+app.post("/api/auth/login", async (req, res) => {
+  const { email, password } = req.body;
+  console.log("[Login Route] Request body:", req.body);
+
+  const user = await storage.getUserByEmail(email);
+  if (!user) {
+    return res.status(401).json({ message: "Invalid credentials, wrong email" });
+  }
+
+  const isPasswordValid = password === user.password; // Use real hash comparison in production
+  if (!isPasswordValid) {
+    return res.status(401).json({ message: "Invalid credentials, wrong password" });
+  }
+
+  req.session.user = { id: user.id, name: user.name, email: user.email, role: user.role };
+  await storage.updateUserLastLogin(user.id);
+
+  res.json({ message: "Logged in", user: req.session.user });
+});
+
+  // POST /api/logout
+  app.post('/api/logout', (req, res) => {
+    req.session.destroy(() => {
+      res.json({ message: 'Logged out' });
+    });
+  });
+
+  // GET /api/me
+  app.get('/api/me', (req, res) => {
+    if (!req.session?.user) {
+      return res.status(401).json({ message: 'Not authenticated' });
+    }
+    res.json(req.session.user);
+  });
+
   // Positions routes
-  app.get(`${apiPrefix}/positions`, async (req: Request, res: Response) => {
+app.get(`${apiPrefix}/positions`, isAuthenticated, async (req: Request, res: Response) => {
     try {
       const positions = await storage.getAllPositions();
       res.json(positions);
@@ -103,12 +141,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Candidates routes
-  app.get(`${apiPrefix}/candidates`, async (req: Request, res: Response) => {
+app.get(`${apiPrefix}/candidates`, isAuthenticated, async (req: Request, res: Response) => {
     try {
       const candidates = await storage.getAllCandidates();
-      res.json(candidates);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch candidates" });
+      res.status(200).json(candidates);
+    } catch (error: any) {
+      console.error("Error fetching candidates:", error);
+      res.status(500).json({ error: error.message || "Internal Server Error" });
     }
   });
   
@@ -130,8 +169,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  app.post(`${apiPrefix}/candidates`, async (req: Request, res: Response) => {
+app.post(`${apiPrefix}/candidates`, isAuthenticated, async (req: Request, res: Response) => {
     try {
+      console.log("[POST /api/candidates] Received body:", req.body);
       const result = insertCandidateSchema.safeParse(req.body);
       
       if (!result.success) {
@@ -192,7 +232,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Referrals routes
-  app.get(`${apiPrefix}/referrals`, async (req: Request, res: Response) => {
+app.get(`${apiPrefix}/referrals`, isAuthenticated, async (req: Request, res: Response) => {
     try {
       const referrals = await storage.getAllReferrals();
       res.json(referrals);

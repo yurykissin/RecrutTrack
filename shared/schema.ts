@@ -15,9 +15,11 @@ export const positions = pgTable("positions", {
   dateAdded: timestamp("date_added").notNull().defaultNow(),
 });
 
-export const insertPositionSchema = createInsertSchema(positions).omit({
-  id: true,
-});
+export const insertPositionSchema = createInsertSchema(positions)
+  .omit({ id: true })
+  .extend({
+    dateAdded: z.union([z.string(), z.date()]).transform((val) => new Date(val)),
+  });
 
 // Candidate Schema
 export const candidates = pgTable("candidates", {
@@ -34,9 +36,13 @@ export const candidates = pgTable("candidates", {
   status: text("status").notNull().default("Looking"), // Looking or Placed
 });
 
-export const insertCandidateSchema = createInsertSchema(candidates).omit({
-  id: true,
-});
+export const insertCandidateSchema = createInsertSchema(candidates)
+  .omit({ id: true })
+  .extend({
+    skills: z.string().trim().min(1, "Skills are required"),
+    email: z.string().trim().min(1, "Email is required").email("Invalid email format"),
+    phone: z.string().trim().min(1, "Phone number is required").regex(/^\d{10}$/, "Phone number must be 10 digits"),
+  });
 
 // Referral Schema
 export const referrals = pgTable("referrals", {

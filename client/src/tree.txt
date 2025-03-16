@@ -1,0 +1,106 @@
+client/src/components/context/auth-context.tsx
+client/src/components/auth/protected-route.tsx
+client/src/App.tsx
+client/src/pages/login.tsx
+client/src/lib/queryClient.ts
+server/index.ts
+server/routes.t
+
+.
+├── App.tsx
+├── components
+│   ├── auth
+│   │   └── protected-route.tsx
+│   ├── candidates
+│   │   ├── candidate-card.tsx
+│   │   └── candidate-filters.tsx
+│   ├── context
+│   │   └── auth-context.tsx
+│   ├── dashboard
+│   │   ├── activity-item.tsx
+│   │   └── stats-card.tsx
+│   ├── layout
+│   │   ├── header.tsx
+│   │   ├── mobile-sidebar.tsx
+│   │   └── sidebar.tsx
+│   ├── modals
+│   │   ├── candidate-modal.tsx
+│   │   ├── position-modal.tsx
+│   │   └── referral-modal.tsx
+│   ├── positions
+│   │   ├── position-filters.tsx
+│   │   └── positions-table.tsx
+│   ├── referrals
+│   │   ├── referral-filters.tsx
+│   │   └── referrals-table.tsx
+│   └── ui
+│       ├── accordion.tsx
+│       ├── alert-dialog.tsx
+│       ├── alert.tsx
+│       ├── aspect-ratio.tsx
+│       ├── avatar.tsx
+│       ├── badge.tsx
+│       ├── breadcrumb.tsx
+│       ├── button.tsx
+│       ├── calendar.tsx
+│       ├── card.tsx
+│       ├── carousel.tsx
+│       ├── chart.tsx
+│       ├── checkbox.tsx
+│       ├── collapsible.tsx
+│       ├── command.tsx
+│       ├── context-menu.tsx
+│       ├── dialog.tsx
+│       ├── drawer.tsx
+│       ├── dropdown-menu.tsx
+│       ├── form.tsx
+│       ├── hover-card.tsx
+│       ├── input-otp.tsx
+│       ├── input.tsx
+│       ├── label.tsx
+│       ├── menubar.tsx
+│       ├── navigation-menu.tsx
+│       ├── pagination.tsx
+│       ├── popover.tsx
+│       ├── progress.tsx
+│       ├── radio-group.tsx
+│       ├── resizable.tsx
+│       ├── scroll-area.tsx
+│       ├── select.tsx
+│       ├── separator.tsx
+│       ├── sheet.tsx
+│       ├── sidebar.tsx
+│       ├── skeleton.tsx
+│       ├── slider.tsx
+│       ├── switch.tsx
+│       ├── table.tsx
+│       ├── tabs.tsx
+│       ├── textarea.tsx
+│       ├── toast.tsx
+│       ├── toaster.tsx
+│       ├── toggle-group.tsx
+│       ├── toggle.tsx
+│       └── tooltip.tsx
+├── hooks
+│   ├── use-auth.ts
+│   ├── use-mobile.tsx
+│   └── use-toast.ts
+├── index.css
+├── lib
+│   ├── queryClient.ts
+│   ├── utils
+│   │   └── format.ts
+│   └── utils.ts
+├── main.tsx
+├── pages
+│   ├── candidates.tsx
+│   ├── dashboard.tsx
+│   ├── login copy.tsx
+│   ├── login.tsx
+│   ├── not-found.tsx
+│   ├── positions.tsx
+│   ├── referrals.tsx
+│   └── settings.tsx
+└── tree.txt
+
+15 directories, 81 files

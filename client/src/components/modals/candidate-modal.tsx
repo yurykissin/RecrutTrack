@@ -38,6 +38,11 @@ export default function CandidateModal({
   isSubmitting
 }: CandidateModalProps) {
   const formSchema = insertCandidateSchema.extend({
+    fullName: z.string().min(1, "Full name is required"),
+    email: z.string().min(1, "Email is required").email("Invalid email format"),
+    phone: z.string().min(1, "Phone is required"),
+    currentRole: z.string().min(1, "Current role is required"),
+    skills: z.string().min(1, "Skills are required"),
     experience: z.coerce.number().min(0, "Experience must be positive"),
   });
 

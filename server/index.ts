@@ -1,16 +1,63 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
-import { setupVite, serveStatic, log } from "./vite";
+import { setupVite, serveStatic } from "./vite";
 import { seedDatabase } from "./storage-pg";
-// import { migrate } from "drizzle-orm/node-postgres/migrator";
-import { drizzle } from "drizzle-orm/node-postgres";
-import pg from "pg";
-
+import pg from 'pg';
 const { Pool } = pg;
+import cors from "cors";
+import session from "express-session";
+
+declare module "express-session" {
+  interface SessionData {
+    user?: {
+      id: number;
+      name: string;
+      email: string;
+      role: string;
+    };
+  }
+}
 
 const app = express();
+app.use(cors({
+  origin: "http://localhost:5173", // Adjust to your frontend URL
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+if (!process.env.SESSION_SECRET) {
+  console.warn("⚠️  SESSION_SECRET not set. Using fallback insecure secret.");
+}
+
+// Session middleware (must be before routes and authentication checks)
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "super-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false, // true if running behind HTTPS (e.g., in production)
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    },
+  })
+);
+
+app.use((req, _res, next) => {
+  console.log("[session] Session state:", req.session);
+  if (req.session?.user) {
+    console.log("[session] Authenticated user:", req.session.user);
+  } else {
+    console.log("[session] No authenticated user.");
+  }
+  next();
+});
+
+app.use((req, res, next) => {
+  console.log(`[request] ${req.method} ${req.url}`);
+  next();
+});
 
 app.use((req, res, next) => {
   const start = Date.now();
@@ -27,15 +74,17 @@ app.use((req, res, next) => {
     const duration = Date.now() - start;
     if (path.startsWith("/api")) {
       let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
-      if (capturedJsonResponse) {
+      try {
         logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
+      } catch (err) {
+        logLine += " :: [Error stringifying JSON response]";
       }
 
       if (logLine.length > 80) {
         logLine = logLine.slice(0, 79) + "…";
       }
 
-      log(logLine);
+      console.log(logLine);
     }
   });
 
@@ -46,21 +95,19 @@ app.use((req, res, next) => {
 const initDatabase = async () => {
   try {
     // Push schema to database using Drizzle's db:push functionality
-    log("Pushing schema to database...", "database");
+    console.log("Pushing schema to database...", "database");
     
     // We're using drizzle-orm's migrate functionality to create the tables
     const pool = new Pool({
       connectionString: process.env.DATABASE_URL,
     });
     
-    const db = drizzle(pool);
-    
     // Push schema changes directly to the database
-    log("Creating database tables if they don't exist...", "database");
+    console.log("Creating database tables if they don't exist...", "database");
     
     // This is where we would normally use migrations, but for simplicity,
     // we're directly pushing the schema changes to the database
-    await db.execute(`
+    await pool.query(`
       CREATE TABLE IF NOT EXISTS positions (
         id SERIAL PRIMARY KEY,
         title TEXT NOT NULL,
@@ -125,9 +172,9 @@ const initDatabase = async () => {
     // Seed the database with initial data
     await seedDatabase();
     
-    log("Database initialization completed", "database");
+    console.log("Database initialization completed", "database");
   } catch (error) {
-    log(`Error initializing database: ${error}`, "database");
+    console.log(`Error initializing database: ${error}`, "database");
     console.error("Database initialization error:", error);
   }
 };
@@ -155,15 +202,15 @@ const initDatabase = async () => {
     serveStatic(app);
   }
 
-  // ALWAYS serve the app on port 5000
+  // ALWAYS serve the app on port 3000
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
-  const port = 5000;
+  const port = 3000;
   server.listen({
     port,
     host: "0.0.0.0",
     reusePort: true,
   }, () => {
-    log(`serving on port ${port}`);
+    console.log(`serving on port ${port}`);
   });
 })();

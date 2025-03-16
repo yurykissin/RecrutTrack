@@ -16,7 +16,7 @@ export default function MobileSidebar({ isOpen, onClose, currentPath }: MobileSi
     <div className="fixed inset-0 bg-gray-800 bg-opacity-75 z-20 md:hidden">
       <div className="bg-indigo-800 text-white w-64 h-full overflow-y-auto">
         <div className="p-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold">RecrutTrack</h1>
+          <h1 className="text-2xl font-bold">WAYO</h1>
           <button onClick={onClose} className="text-white">
             <X className="h-5 w-5" />
           </button>

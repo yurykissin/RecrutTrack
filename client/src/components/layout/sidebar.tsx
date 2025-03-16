@@ -11,7 +11,7 @@ export default function Sidebar({ currentPath }: SidebarProps) {
   return (
     <div className="bg-indigo-800 text-white w-64 flex-shrink-0 hidden md:flex md:flex-col">
       <div className="p-4">
-        <h1 className="text-2xl font-bold">RecrutTrack</h1>
+        <h1 className="text-2xl font-bold">WAYO</h1>
         <p className="text-indigo-200 text-sm">Recruitment & Referral Management</p>
       </div>
       <nav className="mt-5 flex-1">
