@@ -342,7 +342,16 @@ export class PostgresStorage implements IStorage {
   }
   
   async createReferral(referral: InsertReferral): Promise<Referral> {
-    const result = await db.insert(referrals).values(referral).returning();
+    // Convert string date to Date object if needed
+    const processedReferral: any = {
+      ...referral
+    };
+    
+    if (typeof referral.referralDate === 'string') {
+      processedReferral.referralDate = new Date(referral.referralDate);
+    }
+
+    const result = await db.insert(referrals).values(processedReferral).returning();
     const newReferral = result[0];
     
     // Get candidate and position for activity
@@ -371,8 +380,14 @@ export class PostgresStorage implements IStorage {
       return undefined;
     }
     
+    // Convert string date to Date object if needed
+    const processedReferral: any = { ...referral };
+    if (processedReferral.referralDate && typeof processedReferral.referralDate === 'string') {
+      processedReferral.referralDate = new Date(processedReferral.referralDate);
+    }
+    
     const result = await db.update(referrals)
-      .set(referral)
+      .set(processedReferral)
       .where(eq(referrals.id, id))
       .returning();
     
