@@ -52,9 +52,13 @@ export const referrals = pgTable("referrals", {
   feeMonths: integer("fee_months"), // Number of months for outsource mode
 });
 
-export const insertReferralSchema = createInsertSchema(referrals).omit({
-  id: true,
-});
+export const insertReferralSchema = createInsertSchema(referrals)
+  .omit({
+    id: true,
+  })
+  .extend({
+    referralDate: z.union([z.string(), z.date()]), // Accept both string and Date objects
+  });
 
 // Activity Schema for dashboard
 export const activities = pgTable("activities", {

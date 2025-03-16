@@ -165,18 +165,36 @@ export default function ReferralsTable({
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => handleStatusChange(referral, "Referred")}>
-                          <span className="mr-2">🔄</span> Mark as Referred
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleStatusChange(referral, "Interviewing")}>
-                          <span className="mr-2">📅</span> Mark as Interviewing
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleStatusChange(referral, "Hired")}>
-                          <CheckCircle className="mr-2 h-4 w-4 text-green-600" /> Mark as Hired
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleStatusChange(referral, "Rejected")}>
-                          <span className="mr-2">❌</span> Mark as Rejected
-                        </DropdownMenuItem>
+                        {referral.status !== "Referred" && (
+                          <DropdownMenuItem onClick={() => handleStatusChange(referral, "Referred")}>
+                            <span className="mr-2">🔄</span> Mark as Referred
+                          </DropdownMenuItem>
+                        )}
+                        {referral.status !== "Interviewing" && (
+                          <DropdownMenuItem onClick={() => handleStatusChange(referral, "Interviewing")}>
+                            <span className="mr-2">📅</span> Mark as Interviewing
+                          </DropdownMenuItem>
+                        )}
+                        {referral.status !== "Hired" && (
+                          <DropdownMenuItem onClick={() => handleStatusChange(referral, "Hired")}>
+                            <CheckCircle className="mr-2 h-4 w-4 text-green-600" /> Mark as Hired
+                          </DropdownMenuItem>
+                        )}
+                        {referral.status !== "Rejected" && (
+                          <DropdownMenuItem onClick={() => handleStatusChange(referral, "Rejected")}>
+                            <span className="mr-2">❌</span> Mark as Rejected
+                          </DropdownMenuItem>
+                        )}
+                        {/* Always show edit fee option for hired referrals */}
+                        {referral.status === "Hired" && (
+                          <DropdownMenuItem onClick={() => {
+                            setSelectedReferral(referral);
+                            setFeeAmount(referral.feeEarned || undefined);
+                            setShowFeeDialog(true);
+                          }}>
+                            <span className="mr-2">💰</span> Edit Fee
+                          </DropdownMenuItem>
+                        )}
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={() => onDelete(referral.id)}>
                           <Trash2 className="mr-2 h-4 w-4 text-red-600" /> Delete
